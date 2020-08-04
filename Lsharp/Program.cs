@@ -26,7 +26,6 @@ namespace Lsharp
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool ReadProcessMemory(IntPtr hProcess,int lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
         public static IntPtr processHandle;
-        public static FormOverlay o_form;
         public static Thread FormOverlay = new Thread(StartOverlay);
 
 
@@ -40,8 +39,7 @@ namespace Lsharp
         }
         private static void StartOverlay()
         {
-            o_form = new FormOverlay();
-            Application.Run(o_form);
+
 
 
         }

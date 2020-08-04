@@ -84,10 +84,7 @@ namespace Lsharp
             try
             {
                 UpdateVals.Abort();
-                Program.o_form.Invoke((MethodInvoker)delegate
-                {
-                    Program.o_form.Close();
-                });
+
             }
             catch
             {
