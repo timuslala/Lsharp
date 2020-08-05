@@ -78,7 +78,7 @@ namespace Lsharp
                 RefreashMaxObjects();
                 IterateObjects();
                 FindMissiles();
-                Thread.Sleep(3);
+                //Thread.Sleep(3);
                 m_form.labelHp.Invoke((MethodInvoker)delegate
                 {
                     System.Numerics.Vector2 ekran = new System.Numerics.Vector2();

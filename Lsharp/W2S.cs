@@ -192,8 +192,8 @@ namespace Lsharp
 			byte v11 = 0; // cl
 			int v13 = 0; // [esp+8h] [ebp-4h]
 			int result = 0;
-			v1 = GetObjByte(dwObj+0x3498);
-			v2 = (int)(dwObj + 0x3490);
+			v1 = GetObjByte(dwObj+0x34A8);
+			v2 = (int)(dwObj + 0x34A0);
 			v3 = 0;
 			v4 = GetObjByte(v2 + 1);
 

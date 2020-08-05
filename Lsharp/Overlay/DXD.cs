@@ -61,6 +61,7 @@ namespace ExSharpBase.Overlay
                 CreateParams cp = base.CreateParams;
                 // turn on WS_EX_TOOLWINDOW style bit
                 cp.ExStyle |= 0x80;
+                cp.ExStyle |= 0x00000008;
                 return cp;
             }
         }

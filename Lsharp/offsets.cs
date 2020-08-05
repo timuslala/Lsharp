@@ -9,10 +9,10 @@ namespace Lsharp
     public partial class Program
     {
         //inside game offsets
-        const int LOCAL_PLAYER = 0x34FF448;
-        const int OBJECT_MANAGER = 0x1C5C8B0;
-        const int GAME_TIME = 0x34F7704;
-        const int RENDERER = 0x3526534;
+        const int LOCAL_PLAYER = 0x34FF634;
+        const int OBJECT_MANAGER = 0x1C5CC30;//0x1C5C8B0; //outdated
+        const int GAME_TIME = 0x34F7A7C;
+        const int RENDERER = 0x35269A0;
         //inside renderer
         const int RENDERER_VIEWMATRIX = 0x6C;
         const int RENDERER_PROJECTIONMATRIX = 0xAC;
@@ -30,12 +30,13 @@ namespace Lsharp
         const int OBJ_MANA_MAX = 0x48C;
         const int OBJ_POSITION = 0x1D8;
         const int OBJ_SUMMONER_NAME = 0x6C;
-        const int OBJ_ACTOR_NAME = 0x358C;//0x3290 ptr
+        const int OBJ_ACTOR_NAME = 0x35AC;//0x3290 ptr
         const int OBJ_TEAM = 0x4C;//100 - BLUE, 200 - RED
         const int OBJ_SPELLBOOK = 0x2F64;
         const int OBJ_ISTARGETABLE = 0xEF4;
         const int OBJ_RECALLSTATE = 0xF80;
-        const int OBJ_ATTACKRANGE = 0x14A4;
+        const int OBJ_ATTACKRANGE = 0x14B4;
+        const int OBJ_VISIBILITY = 0x39C;
         //inside spellbook
         const int SPELLBOOK_FIRSTSPELL = 0x508;
         //inside spell

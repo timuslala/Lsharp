@@ -16,7 +16,7 @@ namespace Lsharp.Overlay
         public static SharpDX.Color mycolor = new SharpDX.Color(255, 100, 0);
         public static void OnDrawMan()
         {
-
+            
             //DrawFactory.DrawLine(0, 0, 100, 100, 5, new SharpDX.Color(10, 10, 10));
             //g = e.Graphics;
             if (Program.localheroteam == Team.Blue || Program.m_form.checkBoxShowAlly.Checked)

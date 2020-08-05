@@ -67,7 +67,7 @@ namespace Lsharp.Overlay.Drawing
             public static void DrawLine(float x1, float y1, float x2, float y2, float w, SharpDX.Color Color)
             {
                 drawLine.Width = w;
-                drawLine.Antialias = false;
+                drawLine.Antialias = true;
                 drawLine.GLLines = true;
 
                 SharpDX.Vector2[] vertices =
@@ -205,7 +205,7 @@ namespace Lsharp.Overlay.Drawing
             private static VertexDeclaration VertexDeclaration;
             private static VertexElement[] VertexElements;
 
-            public static void DrawCircleRange(RawVector3 Position, float Radius, SharpDX.Color Color, float Thickness, bool filled = false)
+            public static void DrawCircleRange(SharpDX.Vector3 Position, float Radius, SharpDX.Color Color, float Thickness, bool filled = false)
             {
                 if (Effect == null || Effect.IsDisposed)
                     return;
