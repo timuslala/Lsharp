@@ -27,11 +27,11 @@ namespace Lsharp
 			clipCoords.Z = pos.X * matrix.M13 + pos.Y * matrix.M23 + pos.Z * matrix.M33 + matrix.M43;
 			clipCoords.W = pos.X * matrix.M14 + pos.Y * matrix.M24 + pos.Z * matrix.M34 + matrix.M44;
 
-			if (clipCoords.W < 0.1f)
+			/*if (clipCoords.W < 0.1f)
 			{
 				onscreen = new System.Numerics.Vector2(0, 0);
 				return false;
-			}
+			}*/
 			System.Numerics.Vector3 M;
 			M.X = clipCoords.X / clipCoords.W;
 			M.Y = clipCoords.Y / clipCoords.W;

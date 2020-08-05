@@ -17,89 +17,32 @@ namespace Lsharp.Overlay
         public static void OnDrawMan()
         {
             
-            //DrawFactory.DrawLine(0, 0, 100, 100, 5, new SharpDX.Color(10, 10, 10));
-            //g = e.Graphics;
             if (Program.localheroteam == Team.Blue || Program.showallies)
             {
-                for (int i = 0; i < 5; i++)
+                int i = 0;
+                while (Program.ChampionsRed[i] != 0)
                 {
-                    try
-                    {
-                        DrawPath(Program.ChampionsRedCache[i]);
-                        //g.DrawString(RedDrawText[i], drawFont, redBrush, Lsharp.FormOverlay.RedDrawPoint[i]);
-                        DrawFactory.DrawFont(DrawManager.RedDrawText[i], 10, new SharpDX.Vector2(DrawManager.RedDrawPoint[i].X*2, DrawManager.RedDrawPoint[i].Y*2), mycolor);
-                        DrawFactory.DrawCircleRange(new SharpDX.Vector3(Program.ChampionsRedCache[i].position.X,
-    Program.ChampionsRedCache[i].position.Y,
-    Program.ChampionsRedCache[i].position.Z
-    ), Program.ChampionsRedCache[i].attackrange, mycolor, 5.0f, false);
-                        System.Numerics.Vector2 ekran = new System.Numerics.Vector2();
-                        System.Numerics.Vector2 ekran2 = new System.Numerics.Vector2();
-                        System.Numerics.Vector3 range;
-                        System.Numerics.Vector3 range2;
-
-                        for (int j = 0; j < 63; j = j + 1)
-                        {
-                            range = Program.ChampionsRedCache[i].position;
-                            range.X = (int)(Program.ChampionsRedCache[i].position.X + Program.ChampionsRedCache[i].attackrange * Math.Sin((((j + 1) * 0.1) + 2)) + Program.ChampionsRedCache[i].attackrange * Math.Sin(((j + 1) * 0.1)));
-                            range.Z = (int)(Program.ChampionsRedCache[i].position.Z + Program.ChampionsRedCache[i].attackrange * Math.Cos((((j + 1) * 0.1) + 2)) + Program.ChampionsRedCache[i].attackrange * Math.Cos(((j + 1) * 0.1)));
-                            if (!Program.WorldToScreen(range, out ekran))
-                            {
-                                break;
-                            }
-                            range2 = Program.ChampionsRedCache[i].position;
-                            range2.X = (int)(Program.ChampionsRedCache[i].position.X + Program.ChampionsRedCache[i].attackrange * Math.Sin(((j * 0.1) + 2)) + Program.ChampionsRedCache[i].attackrange * Math.Sin(j * 0.1));
-                            range2.Z = (int)(Program.ChampionsRedCache[i].position.Z + Program.ChampionsRedCache[i].attackrange * Math.Cos(((j * 0.1) + 2)) + Program.ChampionsRedCache[i].attackrange * Math.Cos(j * 0.1));
-
-                            if (!Program.WorldToScreen(range2, out ekran2))
-                            {
-                                break;
-                            }
-                            DrawFactory.DrawLine(ekran.X, ekran.Y, ekran2.X, ekran2.Y, 2, mycolor);
-                        }
-                    }
-                    catch { }
+                    DrawPath(Program.ChampionsRedCache[i]);
+                    DrawFactory.DrawFont(DrawManager.RedDrawText[i], 10, new SharpDX.Vector2(DrawManager.RedDrawPoint[i].X*2, DrawManager.RedDrawPoint[i].Y*2), mycolor);
+                    DrawFactory.DrawCircleRange(new SharpDX.Vector3(Program.ChampionsRedCache[i].position.X,
+                    Program.ChampionsRedCache[i].position.Y,
+                    Program.ChampionsRedCache[i].position.Z
+                    ), Program.ChampionsRedCache[i].attackrange + Program.ChampionsRedCache[i].BoundingRadius, mycolor, 5.0f, false);
+                    i++;
                 }
             }
             if (Program.localheroteam == Team.Red || Program.showallies)
             {
-                for (int i = 0; i < 5; i++)
+                int i = 0;
+                while (Program.ChampionsBlue[i] != 0)
                 {
                     DrawPath(Program.ChampionsBlueCache[i]);
-                    //g.DrawString(Lsharp.FormOverlay.BlueDrawText[i], drawFont, redBrush, Lsharp.FormOverlay.BlueDrawPoint[i]);
                     DrawFactory.DrawFont(DrawManager.BlueDrawText[i],10, new SharpDX.Vector2(DrawManager.BlueDrawPoint[i].X*2, DrawManager.BlueDrawPoint[i].Y*2),mycolor);
                     DrawFactory.DrawCircleRange(new SharpDX.Vector3(Program.ChampionsBlueCache[i].position.X,
-                        Program.ChampionsBlueCache[i].position.Y,
-                        Program.ChampionsBlueCache[i].position.Z
-                        ), Program.ChampionsBlueCache[i].attackrange+Program.ChampionsBlueCache[i].BoundingRadius, mycolor, 5.0f, false);
-                    
-                    try
-                    {
-                        System.Numerics.Vector2 ekran = new System.Numerics.Vector2();
-                        System.Numerics.Vector2 ekran2 = new System.Numerics.Vector2();
-                        System.Numerics.Vector3 range;
-                        System.Numerics.Vector3 range2;
-
-                        for (int j = 0; j < 63; j = j + 1)
-                        {
-                            range = Program.ChampionsBlueCache[i].position;
-                            range.X = (int)(Program.ChampionsBlueCache[i].position.X + Program.ChampionsBlueCache[i].attackrange * Math.Sin((((j + 1) * 0.1) + 2)) + Program.ChampionsBlueCache[i].attackrange * Math.Sin(((j + 1) * 0.1)));
-                            range.Z = (int)(Program.ChampionsBlueCache[i].position.Z + Program.ChampionsBlueCache[i].attackrange * Math.Cos((((j + 1) * 0.1) + 2)) + Program.ChampionsBlueCache[i].attackrange * Math.Cos(((j + 1) * 0.1)));
-                            if (!Program.WorldToScreen(range, out ekran))
-                            {
-                                break;
-                            }
-                            range2 = Program.ChampionsBlueCache[i].position;
-                            range2.X = (int)(Program.ChampionsBlueCache[i].position.X + Program.ChampionsBlueCache[i].attackrange * Math.Sin(((j * 0.1) + 2)) + Program.ChampionsBlueCache[i].attackrange * Math.Sin(j * 0.1));
-                            range2.Z = (int)(Program.ChampionsBlueCache[i].position.Z + Program.ChampionsBlueCache[i].attackrange * Math.Cos(((j * 0.1) + 2)) + Program.ChampionsBlueCache[i].attackrange * Math.Cos(j * 0.1));
-
-                            if (!Program.WorldToScreen(range2, out ekran2))
-                            {
-                                break;
-                            }
-                            DrawFactory.DrawLine(ekran.X, ekran.Y, ekran2.X, ekran2.Y, 2, mycolor);
-                        }
-                    }
-                    catch { }
+                    Program.ChampionsBlueCache[i].position.Y,
+                   Program.ChampionsBlueCache[i].position.Z
+                    ), Program.ChampionsBlueCache[i].attackrange+Program.ChampionsBlueCache[i].BoundingRadius, mycolor, 5.0f, false);
+                    i++;
                 }
             }
             
@@ -107,7 +50,7 @@ namespace Lsharp.Overlay
             while (Program.MissileArray[k] != 0)
             {
                 DrawSpell(Program.MissileArray[k],false);
-                DebugDraw(Program.MissileArray[k], false);
+                //DebugDraw(Program.MissileArray[k], false);
                 k++;
             }
             for (int i = 0; i < 9; i++)
@@ -122,7 +65,7 @@ namespace Lsharp.Overlay
                     activespell = Program.GetObjInt32(Program.ChampionsBlueCache[i].spellbook + 0x20);
                 }
                 DrawSpell(activespell,true);
-                DebugDraw(activespell,true);
+                //DebugDraw(activespell,true);
             }
             
         }
@@ -142,8 +85,6 @@ namespace Lsharp.Overlay
                 return;
             }
             DrawFactory.DrawLine(ekran.X,ekran.Y,ekran2.X,ekran2.Y,2,mycolor);
-
-            //g.DrawLine(myPen, ekran.X, ekran.Y, ekran2.X, ekran2.Y);
         }
 
         public static void DrawSpell(int SpellToDraw, bool fromspellbook)
@@ -213,6 +154,46 @@ namespace Lsharp.Overlay
                         System.Numerics.Vector3 P2new = new System.Numerics.Vector3(R2X, startpos.Y, R2Y);
                         System.Numerics.Vector3 P3new = new System.Numerics.Vector3(R3X, endpos.Y, R3Y);
                         System.Numerics.Vector3 P4new = new System.Numerics.Vector3(R4X, endpos.Y, R4Y);
+                        if (range > 3000)
+                        {
+                            System.Numerics.Vector3 P5new = new System.Numerics.Vector3((R1X+R4X)/2, (startpos.Y+endpos.Y)/2,(R1Y+R4Y)/2);
+                            System.Numerics.Vector3 P6new = new System.Numerics.Vector3((R2X + R3X) / 2, (startpos.Y + endpos.Y) / 2, (R2Y + R3Y) / 2);
+                            System.Numerics.Vector2 P5 = new System.Numerics.Vector2();
+                            System.Numerics.Vector2 P6 = new System.Numerics.Vector2();
+                            bool[] P = new bool[7];
+                            P[1] = Program.WorldToScreen(P1new, out P1);
+                            P[2] = Program.WorldToScreen(P2new, out P2);
+                            P[3] = Program.WorldToScreen(P3new, out P3);
+                            P[4] = Program.WorldToScreen(P4new, out P4);
+                            P[5] = Program.WorldToScreen(P5new, out P5);
+                            P[6] = Program.WorldToScreen(P6new, out P6);
+                            P[0] = Program.WorldToScreen(Program.GetObjPosition(SpellToDraw), out ekran3);
+                            if (P[1] && P[2])
+                            {
+                                DrawFactory.DrawLine(P1.X, P1.Y, P2.X, P2.Y, 2, mycolor);
+                            }
+                            if (P[2] && P[6])
+                            {
+                                DrawFactory.DrawLine(P2.X, P2.Y, P6.X, P6.Y, 2, mycolor);
+                            }
+                            if (P[6] && P[3])
+                            {
+                                DrawFactory.DrawLine(P6.X, P6.Y, P3.X, P3.Y, 2, mycolor);
+                            }
+                            if (P[3] && P[4])
+                            {
+                                DrawFactory.DrawLine(P3.X, P3.Y, P4.X, P4.Y, 2, mycolor);
+                            }
+                            if (P[4] && P[5])
+                            {
+                                DrawFactory.DrawLine(P4.X, P4.Y, P5.X, P5.Y, 2, mycolor);
+                            }
+                            if (P[5] && P[1])
+                            {
+                                DrawFactory.DrawLine(P5.X, P5.Y, P1.X, P1.Y, 2, mycolor);
+                            }
+                            return;
+                        }
                         if (!Program.WorldToScreen(Program.GetObjPosition(SpellToDraw), out ekran3))
                         {
                             return;
@@ -233,7 +214,6 @@ namespace Lsharp.Overlay
                         {
                             return;
                         }
-
 
                         DrawFactory.DrawLine(P1.X, P1.Y, P2.X, P2.Y, 2, mycolor);
                         DrawFactory.DrawLine(P2.X, P2.Y, P3.X, P3.Y, 2, mycolor);

@@ -20,8 +20,8 @@ namespace Lsharp
         public static int FirstObject;
         public static int ObjectArrayAdress;
         public static int[] ObjectArray = new int[10000];
-        public static int[] ChampionsBlue = new int[5];
-        public static int[] ChampionsRed = new int[5];
+        public static int[] ChampionsBlue = new int[20];
+        public static int[] ChampionsRed = new int[20];
         public static int[] MissileArray = new int[10000];
         
         public static void InitObjManager()
@@ -93,7 +93,7 @@ namespace Lsharp
             string text = "";
             foreach (int champion in ChampionsBlue.Concat(ChampionsRed))
             {
-                text = text + GetObjActorName(champion) + "/" + GetObjPlayerName(champion) + "/" + GetObjHpMax(champion) + "/" + GetObjManaMax(champion) + "/" + champion.ToString("X")+ Environment.NewLine;
+                text = text + GetObjActorName(champion) + "/" + GetObjPlayerName(champion) + "/" + GetObjHpMax(champion) + "/" + GetObjManaMax(champion) + "/" + champion.ToString("X")+"/" + GetNavPtr(champion).ToString("X")+ Environment.NewLine;
 
             }
             return text;

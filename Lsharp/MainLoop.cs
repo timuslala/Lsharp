@@ -95,15 +95,13 @@ namespace Lsharp
                     m_form.labelLocalName.Text = String.Concat(GetObjActorName(LocalHeroPointer), " controlled by ", GetObjPlayerName(LocalHeroPointer), "Team: ", GetObjTeam(LocalHeroPointer), "//", GetObjType(LocalHeroPointer), Environment.NewLine, GetGameTime() +
                 Environment.NewLine + MaxObjects + "//"  );
                 });
-                try
-                {
+
                     DXDOverlay.Invoke((MethodInvoker)delegate
                     {
                         ListChamps();
                         DXDOverlay.DrawScene();
                     });
-                }
-                catch { }
+
             }
         }
         public static void AfterOverlayLoaded(object sender, EventArgs e)
@@ -116,7 +114,8 @@ namespace Lsharp
             localheroteam = GetObjTeam(LocalHeroPointer);
             if (localheroteam == Team.Blue || showallies||true)
             {
-                for (int i = 0; i < 5; i++)
+                int i = 0;
+                while(ChampionsRed[i]!=0)
                 {
                     UpdateCacheChampion(ChampionsRed[i], ChampionsRedCache[i]);
                     System.Numerics.Vector2 ekran = new System.Numerics.Vector2();
@@ -131,11 +130,13 @@ namespace Lsharp
                     {
                         DrawManager.RedDrawText[i] = "";
                     }
+                    i++;
                 }
             }
             if (localheroteam == Team.Red || showallies||true)
             {
-                for (int i = 0; i < 5; i++)
+                int i = 0;
+                while (ChampionsBlue[i] != 0)
                 {
                     UpdateCacheChampion(ChampionsBlue[i], ChampionsBlueCache[i]);
                     System.Numerics.Vector2 ekran = new System.Numerics.Vector2();
@@ -147,7 +148,7 @@ namespace Lsharp
                     {
                         DrawManager.BlueDrawText[i] = ""; 
                     }
-
+                    i++;
                 }
             }
             //o_form.Refresh();
