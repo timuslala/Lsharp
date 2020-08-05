@@ -22,7 +22,7 @@ namespace Lsharp
         public static int[] ObjectArray = new int[10000];
         public static int[] ChampionsBlue = new int[5];
         public static int[] ChampionsRed = new int[5];
-        public static int[] MissileArray = new int[100];
+        public static int[] MissileArray = new int[10000];
         
         public static void InitObjManager()
         {

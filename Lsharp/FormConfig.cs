@@ -94,7 +94,14 @@ namespace Lsharp
 
         private void checkBoxShowAlly_CheckedChanged(object sender, EventArgs e)
         {
-
+            CheckBox senderr = (CheckBox)sender;
+            if (senderr.Checked){
+                Program.showallies = true;
+            }
+            else
+            {
+                Program.showallies = false;
+            }
         }
     }
 }

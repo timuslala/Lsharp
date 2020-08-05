@@ -30,9 +30,9 @@ namespace Lsharp
         const int OBJ_MANA_MAX = 0x48C;
         const int OBJ_POSITION = 0x1D8;
         const int OBJ_SUMMONER_NAME = 0x6C;
-        const int OBJ_ACTOR_NAME = 0x35AC;//0x3290 ptr
+        const int OBJ_ACTOR_NAME = 0x35BC;//0x3290 ptr
         const int OBJ_TEAM = 0x4C;//100 - BLUE, 200 - RED
-        const int OBJ_SPELLBOOK = 0x2F64;
+        const int OBJ_SPELLBOOK = 0x2F7C;
         const int OBJ_ISTARGETABLE = 0xEF4;
         const int OBJ_RECALLSTATE = 0xF80;
         const int OBJ_ATTACKRANGE = 0x14B4;
@@ -68,4 +68,4 @@ namespace Lsharp
 }
 /*MAKE_GET(FlagKey1, DWORD, 0x54); // inside gameobj
 MAKE_GET(FlagKey2, DWORD, 0x64); // inside gameobj
-*/
+*///0x8 +0x18

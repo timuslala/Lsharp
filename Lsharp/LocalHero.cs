@@ -68,6 +68,17 @@ namespace Lsharp
             }
             return false;
         }
+        public static bool IsTroy(int ObjPointer)
+        {
+            if (GetObjByte(ObjPointer + 81) == 1)
+            {
+                int a = 4 * GetObjByte(ObjPointer + 88) + 92 + ObjPointer;
+                int b = GetObjInt32(ObjPointer + 84);
+                int result = GetObjInt32(a) ^ ~b;
+                return (result == 0x101);
+            }
+            return false;
+        }
         public static bool IsRecalling(int ObjPointer, Champion cache)
         {
             return (GetObjByte(ObjPointer + 0xF68) != 0);
@@ -156,6 +167,29 @@ namespace Lsharp
             ReadProcessMemory(processHandle, GetObjInt32(ObjPointer + 0x6C), buffer, buffer.Length, ref bytesRead);
             return (System.Text.Encoding.UTF8.GetString(buffer, 0, 30).Split((char)0)[0]);
         }
+        public static string GetActiveMissileName(int ObjPointer)
+        {
+            
+            var buffer = new byte[30];
+            int bytesRead = 0;
+            ReadProcessMemory(processHandle, Program.GetObjInt32(ObjPointer + 0x8) + 0x18, buffer, buffer.Length, ref bytesRead);
+            return (System.Text.Encoding.UTF8.GetString(buffer, 0, 30).Split((char)0)[0]);
+        }
+        public static string GetActiveMissileNameInside(int ObjPointer)
+        {
 
+            var buffer = new byte[30];
+            int bytesRead = 0;
+            ReadProcessMemory(processHandle,Program.GetObjInt32( Program.GetObjInt32(ObjPointer + 0x8) + 0x18), buffer, buffer.Length, ref bytesRead);
+            return (System.Text.Encoding.UTF8.GetString(buffer, 0, 30).Split((char)0)[0]);
+        }
+        public static int GetBoundingRadius(int ObjPointer)
+        {
+            try
+            {
+                return int.Parse(Program.UnitRadiusData[GetObjActorName(ObjPointer).ToString()]["Gameplay radius"].ToString());
+            }
+            catch { return 0; }
+        }
     }
 }

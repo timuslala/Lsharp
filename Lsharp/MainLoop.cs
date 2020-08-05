@@ -28,18 +28,21 @@ namespace Lsharp
         public static Team localheroteam;
         public static SpellDB.SpellDB SpellDBLoaded;
         public static dynamic data;
+        public static dynamic UnitRadiusData;
         public static DXD DXDOverlay = new DXD();
+        public static bool showallies;
         public static void Init()
         {
             using (StreamReader file = File.OpenText(@"C:\Users\Przemek\source\repos\Lsharp\Lsharp\SpellDB\newSpellDB.json"))
             {
                 
                 JsonSerializer serializer = new JsonSerializer();
-                //data = JsonConvert.DeserializeObject(file.ReadToEnd());
                 data = JObject.Parse(file.ReadToEnd());
-                SpellDBLoaded = (SpellDB.SpellDB)serializer.Deserialize(file, typeof(SpellDB.SpellDB));
-                
-                
+                SpellDBLoaded = (SpellDB.SpellDB)serializer.Deserialize(file, typeof(SpellDB.SpellDB)); 
+            }
+            using (StreamReader file = File.OpenText(@"C:\Users\Przemek\source\repos\Lsharp\Lsharp\UnitRadiusData\UnitRadius.json"))
+            {
+                UnitRadiusData = JObject.Parse(file.ReadToEnd());
             }
             GetLeaguePID();
             GetBaseAddress("League of Legends.exe");
@@ -64,7 +67,7 @@ namespace Lsharp
             int LocalHeroPointer = GetObjInt32(BAdress + LOCAL_PLAYER);
             //while (!OverlayLoaded)
             //{
-
+            
             //}
             InitCache();
             new Thread(() =>
@@ -75,9 +78,13 @@ namespace Lsharp
             
             while (true)
             {
-                RefreashMaxObjects();
-                IterateObjects();
-                FindMissiles();
+                
+                    
+                    RefreashMaxObjects();
+                    IterateObjects();
+                    FindMissiles();
+                
+                
                 //Thread.Sleep(3);
                 m_form.labelHp.Invoke((MethodInvoker)delegate
                 {
@@ -88,11 +95,15 @@ namespace Lsharp
                     m_form.labelLocalName.Text = String.Concat(GetObjActorName(LocalHeroPointer), " controlled by ", GetObjPlayerName(LocalHeroPointer), "Team: ", GetObjTeam(LocalHeroPointer), "//", GetObjType(LocalHeroPointer), Environment.NewLine, GetGameTime() +
                 Environment.NewLine + MaxObjects + "//"  );
                 });
-                DXDOverlay.Invoke((MethodInvoker)delegate
+                try
                 {
-                    ListChamps();
-                    DXDOverlay.DrawScene();
-                });
+                    DXDOverlay.Invoke((MethodInvoker)delegate
+                    {
+                        ListChamps();
+                        DXDOverlay.DrawScene();
+                    });
+                }
+                catch { }
             }
         }
         public static void AfterOverlayLoaded(object sender, EventArgs e)
@@ -103,7 +114,7 @@ namespace Lsharp
         {
             int LocalHeroPointer = GetObjInt32(BAdress + LOCAL_PLAYER);
             localheroteam = GetObjTeam(LocalHeroPointer);
-            if (localheroteam == Team.Blue)// || m_form.checkBoxShowAlly.Checked)
+            if (localheroteam == Team.Blue || showallies||true)
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -122,7 +133,7 @@ namespace Lsharp
                     }
                 }
             }
-            if (localheroteam == Team.Red )//|| m_form.checkBoxShowAlly.Checked)
+            if (localheroteam == Team.Red || showallies||true)
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -179,6 +190,7 @@ namespace Lsharp
         {
             cache.AImanagerPtr = GetNavPtr(champ);
             cache.spellbook = GetObjSpellBook(champ);
+            cache.BoundingRadius = GetBoundingRadius(champ);
             for (int i = 0; i <= 5; i++) 
             {
                 cache.spell[i] = GetSpellBookSpellById(cache.spellbook,i);

@@ -19,7 +19,7 @@ namespace Lsharp.Overlay
             
             //DrawFactory.DrawLine(0, 0, 100, 100, 5, new SharpDX.Color(10, 10, 10));
             //g = e.Graphics;
-            if (Program.localheroteam == Team.Blue || Program.m_form.checkBoxShowAlly.Checked)
+            if (Program.localheroteam == Team.Blue || Program.showallies)
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -28,7 +28,10 @@ namespace Lsharp.Overlay
                         DrawPath(Program.ChampionsRedCache[i]);
                         //g.DrawString(RedDrawText[i], drawFont, redBrush, Lsharp.FormOverlay.RedDrawPoint[i]);
                         DrawFactory.DrawFont(DrawManager.RedDrawText[i], 10, new SharpDX.Vector2(DrawManager.RedDrawPoint[i].X*2, DrawManager.RedDrawPoint[i].Y*2), mycolor);
-
+                        DrawFactory.DrawCircleRange(new SharpDX.Vector3(Program.ChampionsRedCache[i].position.X,
+    Program.ChampionsRedCache[i].position.Y,
+    Program.ChampionsRedCache[i].position.Z
+    ), Program.ChampionsRedCache[i].attackrange, mycolor, 5.0f, false);
                         System.Numerics.Vector2 ekran = new System.Numerics.Vector2();
                         System.Numerics.Vector2 ekran2 = new System.Numerics.Vector2();
                         System.Numerics.Vector3 range;
@@ -57,13 +60,18 @@ namespace Lsharp.Overlay
                     catch { }
                 }
             }
-            if (Program.localheroteam == Team.Red || Program.m_form.checkBoxShowAlly.Checked)
+            if (Program.localheroteam == Team.Red || Program.showallies)
             {
                 for (int i = 0; i < 5; i++)
                 {
                     DrawPath(Program.ChampionsBlueCache[i]);
                     //g.DrawString(Lsharp.FormOverlay.BlueDrawText[i], drawFont, redBrush, Lsharp.FormOverlay.BlueDrawPoint[i]);
                     DrawFactory.DrawFont(DrawManager.BlueDrawText[i],10, new SharpDX.Vector2(DrawManager.BlueDrawPoint[i].X*2, DrawManager.BlueDrawPoint[i].Y*2),mycolor);
+                    DrawFactory.DrawCircleRange(new SharpDX.Vector3(Program.ChampionsBlueCache[i].position.X,
+                        Program.ChampionsBlueCache[i].position.Y,
+                        Program.ChampionsBlueCache[i].position.Z
+                        ), Program.ChampionsBlueCache[i].attackrange+Program.ChampionsBlueCache[i].BoundingRadius, mycolor, 5.0f, false);
+                    
                     try
                     {
                         System.Numerics.Vector2 ekran = new System.Numerics.Vector2();
@@ -94,11 +102,12 @@ namespace Lsharp.Overlay
                     catch { }
                 }
             }
-
+            
             int k = 0;
             while (Program.MissileArray[k] != 0)
             {
-                DrawSpell(Program.MissileArray[k]);
+                DrawSpell(Program.MissileArray[k],false);
+                DebugDraw(Program.MissileArray[k], false);
                 k++;
             }
             for (int i = 0; i < 9; i++)
@@ -112,7 +121,8 @@ namespace Lsharp.Overlay
                 {
                     activespell = Program.GetObjInt32(Program.ChampionsBlueCache[i].spellbook + 0x20);
                 }
-                DrawSpell(activespell);
+                DrawSpell(activespell,true);
+                DebugDraw(activespell,true);
             }
             
         }
@@ -136,17 +146,27 @@ namespace Lsharp.Overlay
             //g.DrawLine(myPen, ekran.X, ekran.Y, ekran2.X, ekran2.Y);
         }
 
-        public static void DrawSpell(int SpellToDraw)
+        public static void DrawSpell(int SpellToDraw, bool fromspellbook)
         {
 
-            string nazwa = Program.GetObjPlayerName(SpellToDraw);
-            string nazwa2 = Program.GetMissileName(SpellToDraw);
-
+            string nazwa;
+            string nazwa2;
+            if (fromspellbook)
+            {
+                nazwa = Program.GetActiveMissileNameInside(SpellToDraw);
+                nazwa2 = Program.GetActiveMissileName(SpellToDraw);
+            }
+            else
+            {
+                nazwa = Program.GetObjPlayerName(SpellToDraw);
+                nazwa2 = Program.GetMissileName(SpellToDraw);
+            }
             foreach (var data2 in Program.data.SelectTokens("*.*"))
             {
-                if (data2.type == "linear")
+                if (data2.missileName == nazwa || data2.missileName == nazwa2)
                 {
-                    if (data2.missileName == nazwa || data2.missileName == nazwa2)
+                    
+                    if (data2.type == "linear")
                     {
                         //RYSOWANKO MISSILE
                         System.Numerics.Vector2 ekran3 = new System.Numerics.Vector2();
@@ -156,8 +176,21 @@ namespace Lsharp.Overlay
                         System.Numerics.Vector2 P2 = new System.Numerics.Vector2();
                         System.Numerics.Vector2 P3 = new System.Numerics.Vector2();
                         System.Numerics.Vector2 P4 = new System.Numerics.Vector2();
-                        System.Numerics.Vector3 startpos = Program.GetMissileStartPos(SpellToDraw);
-                        System.Numerics.Vector3 endpos = Program.GetMissileEndPos(SpellToDraw);
+                        System.Numerics.Vector3 startpos;
+                        System.Numerics.Vector3 currpos;
+                        System.Numerics.Vector3 endpos;
+                        if (fromspellbook)
+                        {
+                            startpos = Program.GetObjVector3(SpellToDraw + 0x80);
+                            currpos = startpos;
+                            endpos = Program.GetObjVector3(SpellToDraw + 0x8C);
+                        }
+                        else
+                        {
+                            startpos = Program.GetMissileStartPos(SpellToDraw);
+                            currpos = Program.GetObjPosition(SpellToDraw);
+                            endpos = Program.GetMissileEndPos(SpellToDraw);
+                        }
                         float spellWidth = data2.radius;
 
                         double width = endpos.X - startpos.X;
@@ -168,10 +201,10 @@ namespace Lsharp.Overlay
                         float range = data2.range;
                         endpos.X = (float)(startpos.X + (width / Length * range));
                         endpos.Z = (float)(startpos.Z + (height / Length * range));
-                        float R1X = startpos.X - NX;
-                        float R1Y = startpos.Z + NY;
-                        float R2X = startpos.X + NX;
-                        float R2Y = startpos.Z - NY;
+                        float R1X = currpos.X - NX;
+                        float R1Y = currpos.Z + NY;
+                        float R2X = currpos.X + NX;
+                        float R2Y = currpos.Z - NY;
                         float R3X = endpos.X + NX;
                         float R3Y = endpos.Z - NY;
                         float R4X = endpos.X - NX;
@@ -207,9 +240,46 @@ namespace Lsharp.Overlay
                         DrawFactory.DrawLine(P3.X, P3.Y, P4.X, P4.Y, 2, mycolor);
                         DrawFactory.DrawLine(P4.X, P4.Y, P1.X, P1.Y, 2, mycolor);
 
+                    }else if (data2.type == "circular")
+                    {
+                        System.Numerics.Vector3 endpos;
+                        if (fromspellbook)
+                        {
+                            //startpos = Program.GetObjVector3(SpellToDraw + 0x80);
+                            //currpos = startpos;
+                            endpos = Program.GetObjVector3(SpellToDraw + 0x8C);
+                        }
+                        else
+                        {
+                            //startpos = Program.GetMissileStartPos(SpellToDraw);
+                            //currpos = Program.GetObjPosition(SpellToDraw);
+                            endpos = Program.GetMissileEndPos(SpellToDraw);
+                        }
+                        
+                        SharpDX.Vector3 endpossharp = new SharpDX.Vector3(endpos.X, endpos.Y, endpos.Z);
+                        DrawFactory.DrawCircleRange(endpossharp,(float)data2.radius,mycolor,2.0f,false);
+                        
                     }
                 }
             }
+        }
+        public static void DebugDraw(int activespell, bool fromspellbook)
+        {
+            System.Numerics.Vector2 ekran2 = new System.Numerics.Vector2();
+            System.Numerics.Vector2 ekran3 = new System.Numerics.Vector2();
+            string nazwa = Program.GetObjPlayerName(activespell);
+            string nazwa2 = Program.GetActiveMissileName(activespell);
+            
+            if (!Program.WorldToScreen(Program.GetObjPosition(activespell), out ekran2))
+            {
+                return;
+            }
+            if (!Program.WorldToScreen(Program.GetObjVector3(activespell + 0x80), out ekran3))
+            {
+                //return;
+            }
+            DrawFactory.DrawFont(nazwa + "//" + nazwa2+"//"+activespell.ToString("X"), 10, new SharpDX.Vector2(ekran2.X*2,ekran2.Y*2), mycolor);
+            //DrawFactory.DrawLine(ekran2.X,ekran2.Y,ekran3.X,ekran3.Y,3,mycolor);
         }
     }
 }

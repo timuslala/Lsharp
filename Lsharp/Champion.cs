@@ -20,6 +20,7 @@ namespace Lsharp
         public Single attackrange;
         public System.Numerics.Vector3 position;
         public int AImanagerPtr;
+        public int BoundingRadius;
         public Champion()
         {
             this.spellGotStacks = new bool[6];

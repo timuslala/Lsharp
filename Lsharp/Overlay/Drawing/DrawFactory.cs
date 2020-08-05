@@ -10,7 +10,6 @@ using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
 using SharpDX.Mathematics;
 using System.Drawing;
-using Binarysharp.MemoryManagement.Common.Math3D;
 using System.Drawing.Drawing2D;
 
 namespace Lsharp.Overlay.Drawing

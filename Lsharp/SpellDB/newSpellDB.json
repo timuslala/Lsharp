@@ -4453,7 +4453,7 @@
 			"speed": 1750,
 			"range": 1000,
 			"delay": 0.25,
-			"radius": 240,
+			"radius": 325,
 			"danger": 2,
 			"cc": true,
 			"collision": false,
