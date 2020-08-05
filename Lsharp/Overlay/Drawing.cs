@@ -98,107 +98,9 @@ namespace Lsharp.Overlay
             int k = 0;
             while (Program.MissileArray[k] != 0)
             {
-                //g.DrawString(Program.GetObjPlayerName(Program.MissileArray[k]), drawFont, redBrush, new Point(0+10*k, 0+100*k));
-                string nazwa = Program.GetObjPlayerName(Program.MissileArray[k]);
-                string nazwa2 = Program.GetMissileName(Program.MissileArray[k]);
-
-                foreach (var data2 in Program.data.SelectTokens("*.*"))
-                {
-                    if (data2.type == "linear")
-                    {
-                        if (data2.missileName == nazwa || data2.missileName == nazwa2)
-                        {
-                            //RYSOWANKO MISSILE
-                            System.Numerics.Vector2 ekran3 = new System.Numerics.Vector2();
-                            //System.Numerics.Vector2 start = new System.Numerics.Vector2();
-                            //System.Numerics.Vector2 end = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P1 = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P2 = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P3 = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P4 = new System.Numerics.Vector2();
-                            System.Numerics.Vector3 startpos = Program.GetMissileStartPos(Program.MissileArray[k]);
-                            System.Numerics.Vector3 endpos = Program.GetMissileEndPos(Program.MissileArray[k]);
-                            float spellWidth = data2.radius;
-
-                            double width = endpos.X - startpos.X;
-                            double height = endpos.Z - startpos.Z;
-                            float Length = (float)Math.Sqrt(width * width + height * height); //Thats length of perpendicular
-                            float NX = (float)(spellWidth * height / Length);
-                            float NY = (float)(spellWidth * width / Length);
-                            float range = data2.range;
-                            endpos.X = (float)(startpos.X + (width / Length * range));
-                            endpos.Z = (float)(startpos.Z + (height / Length * range));
-                            float R1X = startpos.X - NX;
-                            float R1Y = startpos.Z + NY;
-                            float R2X = startpos.X + NX;
-                            float R2Y = startpos.Z - NY;
-                            float R3X = endpos.X + NX;
-                            float R3Y = endpos.Z - NY;
-                            float R4X = endpos.X - NX;
-                            float R4Y = endpos.Z + NY;
-                            System.Numerics.Vector3 P1new = new System.Numerics.Vector3(R1X, startpos.Y, R1Y);
-                            System.Numerics.Vector3 P2new = new System.Numerics.Vector3(R2X, startpos.Y, R2Y);
-                            System.Numerics.Vector3 P3new = new System.Numerics.Vector3(R3X, endpos.Y, R3Y);
-                            System.Numerics.Vector3 P4new = new System.Numerics.Vector3(R4X, endpos.Y, R4Y);
-                            if (!Program.WorldToScreen(Program.GetObjPosition(Program.MissileArray[k]), out ekran3))
-                            {
-                                k++;
-                                return;
-                            }
-                            if (!Program.WorldToScreen(P1new, out P1))
-                            {
-                                k++;
-                                return;
-                            }
-                            if (!Program.WorldToScreen(P2new, out P2))
-                            {
-                                k++;
-                                return;
-                            }
-                            if (!Program.WorldToScreen(P3new, out P3))
-                            {
-                                k++;
-                                return;
-                            }
-                            if (!Program.WorldToScreen(P4new, out P4))
-                            {
-                                k++;
-                                return;
-                            }
-                            int test = (int)P1.Y;
-                            /*g.DrawString(Program.MissileArray[0].ToString(), drawFont, redBrush, new Point((int)ekran3.X, (int)ekran3.Y));
-                            g.DrawString(P1.X.ToString() + "//" + P1.Y.ToString() + Environment.NewLine +
-                                P2.X.ToString() + "//" + P2.Y.ToString() + Environment.NewLine +
-                                P3.X.ToString() + "//" + P3.Y.ToString() + Environment.NewLine +
-                                P4.X.ToString() + "//" + P4.Y.ToString() + Environment.NewLine +
-                                Environment.NewLine +
-                                P1new + "//" + P2new, drawFont, redBrush, new Point(0, 0));*/
-                            DrawFactory.DrawLine(P1.X, P1.Y, P2.X, P2.Y, 2, mycolor);
-                            DrawFactory.DrawLine(P2.X, P2.Y, P3.X, P3.Y, 2, mycolor);
-                            DrawFactory.DrawLine(P3.X, P3.Y, P4.X, P4.Y, 2, mycolor);
-                            DrawFactory.DrawLine(P4.X, P4.Y, P1.X, P1.Y, 2, mycolor);
-
-                            /*
-                            if (!Program.WorldToScreen(startpos,out start))
-                            {
-                                return;
-                            }
-                            if (!Program.WorldToScreen(endpos, out end))
-                            {
-                                return;
-                            }
-                            g.DrawLine(myPen, new Point((int)start.X,(int)start.Y), new Point((int)end.X, (int)end.Y));
-                            g.DrawLine(myPen2, new Point((int)ekran3.X, (int)ekran3.Y), new Point((int)end.X, (int)end.Y));
-                            */
-                            //KONIEC RYSOWANKA MISSILE
-                        }
-                    }
-                    continue;
-                }
+                DrawSpell(Program.MissileArray[k]);
                 k++;
-
             }
-
             for (int i = 0; i < 9; i++)
             {
                 int activespell;
@@ -210,82 +112,7 @@ namespace Lsharp.Overlay
                 {
                     activespell = Program.GetObjInt32(Program.ChampionsBlueCache[i].spellbook + 0x20);
                 }
-                string nazwa = Program.GetObjString(Program.GetObjInt32(activespell + 0x8) + 0x18);
-
-
-                foreach (var data2 in Program.data.SelectTokens("*.*"))
-                {
-                    if (data2.type == "linear")
-                    {
-                        if (data2.missileName == nazwa)
-                        {
-                            //RYSOWANKO MISSILE
-                            System.Numerics.Vector2 ekran3 = new System.Numerics.Vector2();
-                            //System.Numerics.Vector2 start = new System.Numerics.Vector2();
-                            //System.Numerics.Vector2 end = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P1 = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P2 = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P3 = new System.Numerics.Vector2();
-                            System.Numerics.Vector2 P4 = new System.Numerics.Vector2();
-                            System.Numerics.Vector3 startpos = Program.GetObjVector3(activespell + 0x80);
-                            System.Numerics.Vector3 endpos = Program.GetObjVector3(activespell + 0x8C);
-                            float spellWidth = data2.radius;
-
-                            double width = endpos.X - startpos.X;
-                            double height = endpos.Z - startpos.Z;
-                            float Length = (float)Math.Sqrt(width * width + height * height); //Thats length of perpendicular
-                            float NX = (float)(spellWidth * height / Length);
-                            float NY = (float)(spellWidth * width / Length);
-                            float range = data2.range;
-                            endpos.X = (float)(startpos.X + (width / Length * range));
-                            endpos.Z = (float)(startpos.Z + (height / Length * range));
-                            float R1X = startpos.X - NX;
-                            float R1Y = startpos.Z + NY;
-                            float R2X = startpos.X + NX;
-                            float R2Y = startpos.Z - NY;
-                            float R3X = endpos.X + NX;
-                            float R3Y = endpos.Z - NY;
-                            float R4X = endpos.X - NX;
-                            float R4Y = endpos.Z + NY;
-                            System.Numerics.Vector3 P1new = new System.Numerics.Vector3(R1X, startpos.Y, R1Y);
-                            System.Numerics.Vector3 P2new = new System.Numerics.Vector3(R2X, startpos.Y, R2Y);
-                            System.Numerics.Vector3 P3new = new System.Numerics.Vector3(R3X, endpos.Y, R3Y);
-                            System.Numerics.Vector3 P4new = new System.Numerics.Vector3(R4X, endpos.Y, R4Y);
-                            if (!Program.WorldToScreen(Program.GetObjPosition(Program.MissileArray[k]), out ekran3))
-                            {
-                                k++;
-                                continue;
-                            }
-                            if (!Program.WorldToScreen(P1new, out P1))
-                            {
-                                k++;
-                                continue;
-                            }
-                            if (!Program.WorldToScreen(P2new, out P2))
-                            {
-                                k++;
-                                continue;
-                            }
-                            if (!Program.WorldToScreen(P3new, out P3))
-                            {
-                                k++;
-                                continue;
-                            }
-                            if (!Program.WorldToScreen(P4new, out P4))
-                            {
-                                k++;
-                                return;
-                            }
-
-                            DrawFactory.DrawLine(P1.X, P1.Y, P2.X, P2.Y, 2, mycolor);
-                            DrawFactory.DrawLine(P2.X, P2.Y, P3.X, P3.Y, 2, mycolor);
-                            DrawFactory.DrawLine(P3.X, P3.Y, P4.X, P4.Y, 2, mycolor);
-                            DrawFactory.DrawLine(P4.X, P4.Y, P1.X, P1.Y, 2, mycolor);
-
-                        }
-                    }
-                    continue;
-                }
+                DrawSpell(activespell);
             }
             
         }
@@ -307,6 +134,82 @@ namespace Lsharp.Overlay
             DrawFactory.DrawLine(ekran.X,ekran.Y,ekran2.X,ekran2.Y,2,mycolor);
 
             //g.DrawLine(myPen, ekran.X, ekran.Y, ekran2.X, ekran2.Y);
+        }
+
+        public static void DrawSpell(int SpellToDraw)
+        {
+
+            string nazwa = Program.GetObjPlayerName(SpellToDraw);
+            string nazwa2 = Program.GetMissileName(SpellToDraw);
+
+            foreach (var data2 in Program.data.SelectTokens("*.*"))
+            {
+                if (data2.type == "linear")
+                {
+                    if (data2.missileName == nazwa || data2.missileName == nazwa2)
+                    {
+                        //RYSOWANKO MISSILE
+                        System.Numerics.Vector2 ekran3 = new System.Numerics.Vector2();
+                        //System.Numerics.Vector2 start = new System.Numerics.Vector2();
+                        //System.Numerics.Vector2 end = new System.Numerics.Vector2();
+                        System.Numerics.Vector2 P1 = new System.Numerics.Vector2();
+                        System.Numerics.Vector2 P2 = new System.Numerics.Vector2();
+                        System.Numerics.Vector2 P3 = new System.Numerics.Vector2();
+                        System.Numerics.Vector2 P4 = new System.Numerics.Vector2();
+                        System.Numerics.Vector3 startpos = Program.GetMissileStartPos(SpellToDraw);
+                        System.Numerics.Vector3 endpos = Program.GetMissileEndPos(SpellToDraw);
+                        float spellWidth = data2.radius;
+
+                        double width = endpos.X - startpos.X;
+                        double height = endpos.Z - startpos.Z;
+                        float Length = (float)Math.Sqrt(width * width + height * height); //Thats length of perpendicular
+                        float NX = (float)(spellWidth * height / Length);
+                        float NY = (float)(spellWidth * width / Length);
+                        float range = data2.range;
+                        endpos.X = (float)(startpos.X + (width / Length * range));
+                        endpos.Z = (float)(startpos.Z + (height / Length * range));
+                        float R1X = startpos.X - NX;
+                        float R1Y = startpos.Z + NY;
+                        float R2X = startpos.X + NX;
+                        float R2Y = startpos.Z - NY;
+                        float R3X = endpos.X + NX;
+                        float R3Y = endpos.Z - NY;
+                        float R4X = endpos.X - NX;
+                        float R4Y = endpos.Z + NY;
+                        System.Numerics.Vector3 P1new = new System.Numerics.Vector3(R1X, startpos.Y, R1Y);
+                        System.Numerics.Vector3 P2new = new System.Numerics.Vector3(R2X, startpos.Y, R2Y);
+                        System.Numerics.Vector3 P3new = new System.Numerics.Vector3(R3X, endpos.Y, R3Y);
+                        System.Numerics.Vector3 P4new = new System.Numerics.Vector3(R4X, endpos.Y, R4Y);
+                        if (!Program.WorldToScreen(Program.GetObjPosition(SpellToDraw), out ekran3))
+                        {
+                            return;
+                        }
+                        if (!Program.WorldToScreen(P1new, out P1))
+                        {
+                            return;
+                        }
+                        if (!Program.WorldToScreen(P2new, out P2))
+                        {
+                            return;
+                        }
+                        if (!Program.WorldToScreen(P3new, out P3))
+                        {
+                            return;
+                        }
+                        if (!Program.WorldToScreen(P4new, out P4))
+                        {
+                            return;
+                        }
+
+
+                        DrawFactory.DrawLine(P1.X, P1.Y, P2.X, P2.Y, 2, mycolor);
+                        DrawFactory.DrawLine(P2.X, P2.Y, P3.X, P3.Y, 2, mycolor);
+                        DrawFactory.DrawLine(P3.X, P3.Y, P4.X, P4.Y, 2, mycolor);
+                        DrawFactory.DrawLine(P4.X, P4.Y, P1.X, P1.Y, 2, mycolor);
+
+                    }
+                }
+            }
         }
     }
 }
